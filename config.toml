@@ -1,0 +1,207 @@
+window_title = 'YAARX'
+window_logo = './logo.jpg'
+binary_file = './bin'
+choice_list = 'default'
+input_types = ['hex', 'decimal', 'binary']
+default_parameter_length = 8
+default_parameter_type = 0
+default_output_lines = [-2]
+
+
+[programs.xdp-add]
+    name = 'xdp-add'
+    description = 'The XOR differential probability (XDP) of modular addition.'
+
+    [[programs.xdp-add.param]]
+        name = 'da'
+
+    [[programs.xdp-add.param]]
+        name = 'db'
+
+    [[programs.xdp-add.param]]
+        name = 'dc'
+
+
+[programs.max-xdp-add]
+    name = 'max-xdp-add'
+    description = 'The maximum XOR differential probability of modular addition.'
+
+    [[programs.max-xdp-add.param]]
+        name = 'da'
+        type = 0
+        length = 8
+
+    [[programs.max-xdp-add.param]]
+        name = 'db'
+        type = 0
+        length = 8
+
+[programs.adp-xor]
+    name = 'adp-xor'
+    description = 'The modular addition differential probability (ADP) of XOR.'
+
+    [[programs.adp-xor.param]]
+        name = 'da'
+        type = 0
+        length = 8
+
+    [[programs.adp-xor.param]]
+        name = 'db'
+        type = 0
+        length = 8
+
+    [[programs.adp-xor.param]]
+        name = 'dc'
+        type = 0
+        length = 8
+
+[programs.max-adp-xor]
+    name = 'max-xdp-add'
+    description = 'The maximum modular addition differential probability of XOR.'
+
+    [[programs.max-adp-xor.param]]
+        name = 'da'
+        type = 0
+        length = 8
+
+    [[programs.max-adp-xor.param]]
+        name = 'db'
+        type = 0
+        length = 8
+
+[programs.adp-lsh]
+    name = 'adp-lsh'
+    description = 'The modular addition differential probability of left shift (LSH).'
+
+    [[programs.adp-lsh.param]]
+        name = 'r'
+        type = 1
+        length = 16
+
+    [[programs.adp-lsh.param]]
+        name = 'da'
+        type = 0
+        length = 16
+
+    [[programs.adp-lsh.param]]
+        name = 'db'
+        type = 0
+        length = 16
+
+[programs.adp-rsh]
+    name = 'adp-rsh'
+    description = 'The modular addition differential probability of right shift (RSH).'
+    output_lines = [2,3,4,5]
+
+    [[programs.adp-rsh.param]]
+        name = 'r'
+        type = 1
+        length = 16
+
+    [[programs.adp-rsh.param]]
+        name = 'da'
+        type = 0
+        length = 16
+
+    [[programs.adp-rsh.param]]
+        name = 'db'
+        type = 0
+        length = 16
+
+[programs.adp-xor-fi]
+    name = 'adp-xor-fi'
+    description = 'The modular addition differential probability of XOR with one fixed input.'
+
+    [[programs.adp-xor-fi.param]]
+        name = 'a'
+        type = 0
+        length = 16
+
+    [[programs.adp-xor-fi.param]]
+        name = 'db'
+        type = 0
+        length = 16
+
+    [[programs.adp-xor-fi.param]]
+        name = 'dc'
+        type = 0
+        length = 16
+
+[programs.max-adp-xor-fi]
+    name = 'max-adp-xor-fi'
+    description = 'The maximum modular addition differential probability of XOR with one fixed input.'
+
+    [[programs.max-adp-xor-fi.param]]
+        name = 'a'
+        type = 0
+        length = 16
+
+    [[programs.max-adp-xor-fi.param]]
+        name = 'db'
+        type = 0
+        length = 16
+
+[programs.adp-xor3]
+    name = 'adp-xor3'
+    description = 'The modular addition differential probability of XOR with three inputs.'
+
+    [[programs.adp-xor3.param]]
+        name = 'da'
+        type = 0
+        length = 16
+
+    [[programs.adp-xor3.param]]
+        name = 'db'
+        type = 0
+        length = 16
+
+    [[programs.adp-xor3.param]]
+        name = 'dc'
+        type = 0
+        length = 16
+
+    [[programs.adp-xor3.param]]
+        name = 'dd'
+        type = 0
+        length = 16
+
+[programs.max-adp-xor3]
+    name = 'max-adp-xor3'
+    description = 'The maximum modular addition differential probability of XOR with three inputs:'
+    [[programs.max-adp-xor3.param]]
+        name = 'da'
+        type = 0
+        length = 16
+
+    [[programs.max-adp-xor3.param]]
+        name = 'db'
+        type = 0
+        length = 16
+
+    [[programs.max-adp-xor3.param]]
+        name = 'dc'
+        type = 0
+        length = 16
+
+[programs.eadp-tea-f]
+    name = 'eadp-tea-f'
+    description = 'The expected additive DP (EADP) of the F-function of TEA, averaged over all round keys and constants.'
+
+    [[programs.eadp-tea-f.param]]
+        name = 'dx'
+        type = 0
+        length = 16
+
+    [[programs.eadp-tea-f.param]]
+        name = 'dy'
+        type = 0
+        length = 16
+
+[programs.max-eadp-tea-f]
+    name = 'max-eadp-tea-f'
+    description = 'The maximum expected additive DP (EADP) of the F-function of TEA, averaged over all round keys and constants.'
+
+    [[programs.max-eadp-tea-f.param]]
+        name = 'dx'
+        type = 0
+        length = 16
