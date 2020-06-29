@@ -12,9 +12,12 @@ class Demo(QWidget):
         super(Demo, self).__init__()
         self.setWindowTitle(configs.window_title)
         self.setWindowIcon(QIcon(configs.window_logo))
+        self.word_size_label = QLabel('Word Size', self)
         self.program_label = QLabel('Program:', self)
         self.program_combobox = QComboBox(self)
+        self.word_size_combobox = QComboBox(self)
         self.current_program = None
+        self.word_size = configs.word_size_list[0]
         self.description = QTextBrowser(self)
         self.description.setFixedHeight(80)
 
@@ -30,12 +33,15 @@ class Demo(QWidget):
         self.v_layout = QVBoxLayout()
 
         self.layout_init()
+        self.word_size_combobox_init()
         self.program_combobox_init()
         self.grid_layout_init()
 
     def layout_init(self):
         self.program_grid_layout.addWidget(self.program_label, 0, 0, 1, 1)
         self.program_grid_layout.addWidget(self.program_combobox, 0, 1, 1, 1)
+        self.program_grid_layout.addWidget(self.word_size_label, 1, 0, 1, 1)
+        self.program_grid_layout.addWidget(self.word_size_combobox, 1, 1, 1, 1)
 
         self.v_layout.addLayout(self.program_grid_layout)
         self.v_layout.addWidget(self.description)
@@ -48,19 +54,25 @@ class Demo(QWidget):
     def grid_layout_init(self):
         self.on_combobox_change_layout()
 
+    def word_size_combobox_init(self):
+        self.word_size_combobox.addItems([str(i) for i in configs.word_size_list])
+        self.word_size_combobox.currentIndexChanged.connect(self.on_combobox_change_word_size)
+
     def program_combobox_init(self):
         self.program_combobox.addItems(configs.choice_list)
         self.program_combobox.currentIndexChanged.connect(self.on_combobox_change_layout)
 
+    def on_combobox_change_word_size(self):
+        print('on call')
+        self.word_size = int(self.word_size_combobox.currentText())
+        self.on_combobox_change_type()
+
     def on_combobox_change_type(self):
-        length = configs.default_parameter_length
+        length = self.word_size
         for i in range(self.grid_layout.count()):
             widget = self.grid_layout.itemAt(i).widget()
             if isinstance(widget, QComboBox):
                 line = self.grid_layout.itemAt(i+1).widget()
-                for param in self.current_program.param:
-                    if param.name == self.grid_layout.itemAt(i-1).widget().text():
-                        length = param.length
                 new_validator = input_validator(length, widget.currentText())
                 if not validator_equal_to(new_validator, line.validator()):
                     line.setValidator(new_validator)
@@ -86,6 +98,15 @@ class Demo(QWidget):
             combobox.addItems(configs.input_types)
             combobox.setCurrentIndex(parameter.type)
 
+        self.word_size_combobox.currentIndexChanged.disconnect(self.on_combobox_change_word_size)
+        self.word_size_combobox.clear()
+        self.word_size_combobox.addItems([str(i) for i in configs.word_size_list])
+        if hasattr(self.current_program, 'except_word_size'):
+            for ws in self.current_program.except_word_size:
+                word_size_list = configs.word_size_list
+                self.word_size_combobox.removeItem(word_size_list.index(ws))
+        self.word_size_combobox.currentIndexChanged.connect(self.on_combobox_change_word_size)
+
     def compute_func(self):
         input_list = []
         for i in range(self.grid_layout.count()):
@@ -95,7 +116,7 @@ class Demo(QWidget):
                 output_type = configs.input_types[self.current_program.param[i//3].type]
                 input_list.append(tools.conversion(input_type, widget.text(), output_type))
 
-        result = tools.compute(self.current_program, configs.binary_file, *input_list)
+        result = tools.compute(self.current_program, self.word_size, configs.binary_file, *input_list)
         self.set_result_func(result)
 
     def set_result_func(self, result):

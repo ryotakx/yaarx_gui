@@ -30,14 +30,12 @@ def configs():
         for i, param in enumerate(config.programs[key].param):
             if 'type' not in param.keys():
                 config.programs[key].param[i]['type'] = config.default_parameter_type
-            if 'length' not in param.keys():
-                config.programs[key].param[i]['length'] = config.default_parameter_length
     return config
 
 
-def compute(program, addr, *param):
+def compute(program, word_size, addr, *param):
     run = subprocess.Popen(
-        addr + '/' + program.name,
+        addr + '/bin' + str(word_size) + '/' + program.name,
         stdout=subprocess.PIPE,
         stdin=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -86,7 +84,7 @@ def input_validator(length, input_type):
     if input_type == 'hex':
         return QRegExpValidator(QRegExp('[0-9a-fA-F]{1,%i}' % length))
     if input_type == 'decimal':
-        return QIntValidator(0, int('9' * length))
+        return QIntValidator(0, int('9' * min(9, length)))
     if input_type == 'binary':
         return QRegExpValidator(QRegExp('[01]{1,%i}' % length * 4))
 

@@ -1,12 +1,37 @@
 window_title = 'YAARX'
 window_logo = './logo.jpg'
-binary_file = './bin'
-choice_list = 'default'
-input_types = ['hex', 'decimal', 'binary']
-default_parameter_length = 8
-default_parameter_type = 0
-default_output_lines = [-2]
+binary_file = './bin' # for compiled yaarx binary file
 
+choice_list = 'default'
+# adjust the order of options in the program selection combobox
+# must be a list[] or 'default'
+# 'default' means the same order for programs in the config file.
+
+word_size_list = [4, 8, 16, 32]
+input_types = ['hex', 'decimal', 'binary']
+
+default_parameter_type = 0
+# the actual input type allowed for the binary file. It can be specified for a particular parameter with modifing
+# the key named 'type' in this parameter. 0 for hexdecimal, 1 for decimal and 2 for binary.
+
+default_output_lines = [-2]
+# a list of lines which need to be formated and display as the output of the program. -2 indicate the second last line.
+
+# a templete for programes
+
+# [programs.demo-program]
+#     name = 'demo-program' # must be the same name as the binary file
+#     description = 'a templete for a demo program' # will be display as instructions
+#     output_lines = [2,3,4] # a list of lines which need to be formated and display as the output of the program.
+#     except_word_size = [4] # a list of word size that may cause error for this program
+
+#     [[programs.demo-program.param]] # list of parameters
+#         name = 'a' # will be display as the lable of the parameter
+#         type = 0 # type of the value allowed
+
+#     [[programs.demo-program.param]]
+#         name = 'b'
+#         type = 0
 
 [programs.xdp-add]
     name = 'xdp-add'
@@ -28,13 +53,9 @@ default_output_lines = [-2]
 
     [[programs.max-xdp-add.param]]
         name = 'da'
-        type = 0
-        length = 8
 
     [[programs.max-xdp-add.param]]
         name = 'db'
-        type = 0
-        length = 8
 
 [programs.adp-xor]
     name = 'adp-xor'
@@ -42,18 +63,13 @@ default_output_lines = [-2]
 
     [[programs.adp-xor.param]]
         name = 'da'
-        type = 0
-        length = 8
 
     [[programs.adp-xor.param]]
         name = 'db'
-        type = 0
-        length = 8
 
     [[programs.adp-xor.param]]
         name = 'dc'
-        type = 0
-        length = 8
+
 
 [programs.max-adp-xor]
     name = 'max-xdp-add'
@@ -61,13 +77,9 @@ default_output_lines = [-2]
 
     [[programs.max-adp-xor.param]]
         name = 'da'
-        type = 0
-        length = 8
 
     [[programs.max-adp-xor.param]]
         name = 'db'
-        type = 0
-        length = 8
 
 [programs.adp-lsh]
     name = 'adp-lsh'
@@ -76,17 +88,13 @@ default_output_lines = [-2]
     [[programs.adp-lsh.param]]
         name = 'r'
         type = 1
-        length = 16
 
     [[programs.adp-lsh.param]]
         name = 'da'
-        type = 0
-        length = 16
 
     [[programs.adp-lsh.param]]
         name = 'db'
-        type = 0
-        length = 16
+
 
 [programs.adp-rsh]
     name = 'adp-rsh'
@@ -96,17 +104,13 @@ default_output_lines = [-2]
     [[programs.adp-rsh.param]]
         name = 'r'
         type = 1
-        length = 16
 
     [[programs.adp-rsh.param]]
         name = 'da'
-        type = 0
-        length = 16
 
     [[programs.adp-rsh.param]]
         name = 'db'
-        type = 0
-        length = 16
+
 
 [programs.adp-xor-fi]
     name = 'adp-xor-fi'
@@ -114,18 +118,12 @@ default_output_lines = [-2]
 
     [[programs.adp-xor-fi.param]]
         name = 'a'
-        type = 0
-        length = 16
 
     [[programs.adp-xor-fi.param]]
         name = 'db'
-        type = 0
-        length = 16
 
     [[programs.adp-xor-fi.param]]
         name = 'dc'
-        type = 0
-        length = 16
 
 [programs.max-adp-xor-fi]
     name = 'max-adp-xor-fi'
@@ -133,13 +131,9 @@ default_output_lines = [-2]
 
     [[programs.max-adp-xor-fi.param]]
         name = 'a'
-        type = 0
-        length = 16
 
     [[programs.max-adp-xor-fi.param]]
         name = 'db'
-        type = 0
-        length = 16
 
 [programs.adp-xor3]
     name = 'adp-xor3'
@@ -147,61 +141,44 @@ default_output_lines = [-2]
 
     [[programs.adp-xor3.param]]
         name = 'da'
-        type = 0
-        length = 16
 
     [[programs.adp-xor3.param]]
         name = 'db'
-        type = 0
-        length = 16
 
     [[programs.adp-xor3.param]]
         name = 'dc'
-        type = 0
-        length = 16
 
     [[programs.adp-xor3.param]]
         name = 'dd'
-        type = 0
-        length = 16
 
 [programs.max-adp-xor3]
     name = 'max-adp-xor3'
     description = 'The maximum modular addition differential probability of XOR with three inputs:'
     [[programs.max-adp-xor3.param]]
         name = 'da'
-        type = 0
-        length = 16
 
     [[programs.max-adp-xor3.param]]
         name = 'db'
-        type = 0
-        length = 16
 
     [[programs.max-adp-xor3.param]]
         name = 'dc'
-        type = 0
-        length = 16
 
 [programs.eadp-tea-f]
     name = 'eadp-tea-f'
     description = 'The expected additive DP (EADP) of the F-function of TEA, averaged over all round keys and constants.'
+    except_word_size = [4]
 
     [[programs.eadp-tea-f.param]]
         name = 'dx'
-        type = 0
-        length = 16
 
     [[programs.eadp-tea-f.param]]
         name = 'dy'
-        type = 0
-        length = 16
 
 [programs.max-eadp-tea-f]
     name = 'max-eadp-tea-f'
     description = 'The maximum expected additive DP (EADP) of the F-function of TEA, averaged over all round keys and constants.'
+    except_word_size = [4]
 
     [[programs.max-eadp-tea-f.param]]
         name = 'dx'
-        type = 0
-        length = 16
+
