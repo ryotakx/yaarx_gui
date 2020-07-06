@@ -17,6 +17,7 @@ https://github.com/vesselinux/yaarx
 should hit RETURN several times and type 'y' once.
 
 3.append the Miniconda binaries directory to path (for example .bashrc)
+depend on operating systems
 
 4.activate conda
 
@@ -34,10 +35,14 @@ after that you can find '(yaarx_gui)' in the input area of your terminal
 
 7.install required packages
 
-`pip install pyQt5`
-`pip install toml`
+`pip install --upgrade pip`
 
-8.run the source code
+`pip install pyQt5`
+
+`pip install toml`
+8.clone the source code from this repo
+
+9.run the source code
 
 `python main.py`
 
