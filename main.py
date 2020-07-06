@@ -63,20 +63,19 @@ class Demo(QWidget):
         self.program_combobox.currentIndexChanged.connect(self.on_combobox_change_layout)
 
     def on_combobox_change_word_size(self):
-        print('on call')
         self.word_size = int(self.word_size_combobox.currentText())
         self.on_combobox_change_type()
 
     def on_combobox_change_type(self):
         length = self.word_size
-        print(length)
+        # print(length)
         for i in range(self.grid_layout.count()):
             widget = self.grid_layout.itemAt(i).widget()
             if isinstance(widget, QComboBox):
                 line = self.grid_layout.itemAt(i+1).widget()
                 new_validator = input_validator(length, widget.currentText())
                 if not validator_equal_to(new_validator, line.validator()):
-                    print('update validator')
+                    # print('update validator')
                     line.setValidator(new_validator)
                     line.setText('0')
 
@@ -96,7 +95,7 @@ class Demo(QWidget):
                 self.word_size_combobox.removeItem(word_size_list.index(ws))
         self.word_size_combobox.currentIndexChanged.connect(self.on_combobox_change_word_size)
         self.word_size = int(self.word_size_combobox.currentText())
-        print('change_layout: %s' % self.word_size)
+        # print('change_layout: %s' % self.word_size)
 
         for i in range(self.grid_layout.count()):
             self.grid_layout.itemAt(i).widget().deleteLater()
