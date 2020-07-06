@@ -4,7 +4,6 @@ import re
 from PyQt5.QtGui import QIntValidator, QRegExpValidator
 from PyQt5.QtCore import QRegExp
 
-
 class ConfigDict(dict):
 
     def __init__(self, *args, **kwargs):

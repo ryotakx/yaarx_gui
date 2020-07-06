@@ -69,12 +69,14 @@ class Demo(QWidget):
 
     def on_combobox_change_type(self):
         length = self.word_size
+        print(length)
         for i in range(self.grid_layout.count()):
             widget = self.grid_layout.itemAt(i).widget()
             if isinstance(widget, QComboBox):
                 line = self.grid_layout.itemAt(i+1).widget()
                 new_validator = input_validator(length, widget.currentText())
                 if not validator_equal_to(new_validator, line.validator()):
+                    print('update validator')
                     line.setValidator(new_validator)
                     line.setText('0')
 
@@ -84,6 +86,17 @@ class Demo(QWidget):
         program = getattr(configs.programs, program_name)
         self.current_program = program
         self.description.setText(program.description)
+
+        self.word_size_combobox.currentIndexChanged.disconnect(self.on_combobox_change_word_size)
+        self.word_size_combobox.clear()
+        self.word_size_combobox.addItems([str(i) for i in configs.word_size_list])
+        if hasattr(self.current_program, 'except_word_size'):
+            for ws in self.current_program.except_word_size:
+                word_size_list = configs.word_size_list
+                self.word_size_combobox.removeItem(word_size_list.index(ws))
+        self.word_size_combobox.currentIndexChanged.connect(self.on_combobox_change_word_size)
+        self.word_size = int(self.word_size_combobox.currentText())
+        print('change_layout: %s' % self.word_size)
 
         for i in range(self.grid_layout.count()):
             self.grid_layout.itemAt(i).widget().deleteLater()
@@ -98,16 +111,8 @@ class Demo(QWidget):
             combobox.addItems(configs.input_types)
             combobox.setCurrentIndex(parameter.type)
 
-        self.word_size_combobox.currentIndexChanged.disconnect(self.on_combobox_change_word_size)
-        self.word_size_combobox.clear()
-        self.word_size_combobox.addItems([str(i) for i in configs.word_size_list])
-        if hasattr(self.current_program, 'except_word_size'):
-            for ws in self.current_program.except_word_size:
-                word_size_list = configs.word_size_list
-                self.word_size_combobox.removeItem(word_size_list.index(ws))
-        self.word_size_combobox.currentIndexChanged.connect(self.on_combobox_change_word_size)
-
     def compute_func(self):
+        self.set_result_func('Computing...')
         input_list = []
         for i in range(self.grid_layout.count()):
             widget = self.grid_layout.itemAt(i).widget()
