@@ -40,7 +40,10 @@ after that you can find '(yaarx_gui)' in the input area of your terminal
 `pip install pyQt5`
 
 `pip install toml`
+
 8.clone the source code from this repo
+
+`git clone https://github.com/ryotakx/yaarx_gui`
 
 9.run the source code
 
