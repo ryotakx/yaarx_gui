@@ -4,6 +4,7 @@ import re
 from PyQt5.QtGui import QIntValidator, QRegExpValidator
 from PyQt5.QtCore import QRegExp
 
+
 class ConfigDict(dict):
 
     def __init__(self, *args, **kwargs):
@@ -63,6 +64,8 @@ def prettify(output, lines):
 
 
 def conversion(input_type, text, output_type):
+    if text == '':
+        text = '0'
     output = text
     if input_type == 'decimal' and output_type == 'hex':
         output = hex(int(text))[2:]
@@ -83,7 +86,7 @@ def input_validator(length, input_type):
     if input_type == 'hex':
         return QRegExpValidator(QRegExp('[0-9a-fA-F]{1,%i}' % length))
     if input_type == 'decimal':
-        return QIntValidator(0, int('9' * min(9, length)))
+        return QIntValidator(0, int('9' * length))
     if input_type == 'binary':
         return QRegExpValidator(QRegExp('[01]{1,%i}' % length * 4))
 
@@ -95,3 +98,8 @@ def validator_equal_to(val1, val2):
         return True
     else:
         return False
+
+
+def compute_word_size(input_type, input_text):
+    output = conversion(input_type, input_text, 'hex')
+    return len(output)

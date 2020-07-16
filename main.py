@@ -2,7 +2,7 @@ import sys
 import tools
 from tools import validator_equal_to, input_validator, configs
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, \
-    QGridLayout, QVBoxLayout, QHBoxLayout, QComboBox, QMessageBox, QTextBrowser
+    QGridLayout, QVBoxLayout, QHBoxLayout, QComboBox, QMessageBox, QTextBrowser, QDesktopWidget
 from PyQt5.QtGui import QIcon
 
 
@@ -36,6 +36,7 @@ class Demo(QWidget):
         self.word_size_combobox_init()
         self.program_combobox_init()
         self.grid_layout_init()
+        self.center()
 
     def layout_init(self):
         self.program_grid_layout.addWidget(self.program_label, 0, 0, 1, 1)
@@ -56,28 +57,53 @@ class Demo(QWidget):
 
     def word_size_combobox_init(self):
         self.word_size_combobox.addItems([str(i) for i in configs.word_size_list])
+        # self.word_size_combobox.setCurrentIndex(2)
         self.word_size_combobox.currentIndexChanged.connect(self.on_combobox_change_word_size)
 
     def program_combobox_init(self):
         self.program_combobox.addItems(configs.choice_list)
         self.program_combobox.currentIndexChanged.connect(self.on_combobox_change_layout)
 
+    def center(self):
+        screen = QDesktopWidget().screenGeometry()
+        size = self.geometry()
+        self.move((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
+
     def on_combobox_change_word_size(self):
         self.word_size = int(self.word_size_combobox.currentText())
         self.on_combobox_change_type()
 
     def on_combobox_change_type(self):
-        length = self.word_size
-        # print(length)
+        # length = self.word_size // 4
+        length = 8
         for i in range(self.grid_layout.count()):
             widget = self.grid_layout.itemAt(i).widget()
             if isinstance(widget, QComboBox):
                 line = self.grid_layout.itemAt(i+1).widget()
+                line.setText('0')
                 new_validator = input_validator(length, widget.currentText())
                 if not validator_equal_to(new_validator, line.validator()):
                     # print('update validator')
                     line.setValidator(new_validator)
-                    line.setText('0')
+
+    def on_line_edit_change_input(self, text):
+        max_word_size = 0
+        for i in range(self.grid_layout.count()):
+            widget = self.grid_layout.itemAt(i).widget()
+            if isinstance(widget, QComboBox):
+                line = self.grid_layout.itemAt(i + 1).widget()
+                # name = self.grid_layout.itemAt(i - 1).widget()
+                # print(name.text())
+                # print(tools.compute_word_size(widget.currentText(), line.text()))
+                max_word_size = max(max_word_size, tools.compute_word_size(widget.currentText(), line.text()))
+        # print(max_word_size)
+        # print('word: %s' % self.word_size)
+        if max_word_size * 4 > self.word_size:
+            i = self.word_size_combobox.currentIndex()
+            self.word_size_combobox.currentIndexChanged.disconnect(self.on_combobox_change_word_size)
+            self.word_size_combobox.setCurrentIndex(min(i+1, 3))
+            self.word_size = int(self.word_size_combobox.currentText())
+            self.word_size_combobox.currentIndexChanged.connect(self.on_combobox_change_word_size)
 
     def on_combobox_change_layout(self):
         program_name = self.program_combobox.currentText()
@@ -89,6 +115,7 @@ class Demo(QWidget):
         self.word_size_combobox.currentIndexChanged.disconnect(self.on_combobox_change_word_size)
         self.word_size_combobox.clear()
         self.word_size_combobox.addItems([str(i) for i in configs.word_size_list])
+        # self.word_size_combobox.setCurrentIndex(2)
         if hasattr(self.current_program, 'except_word_size'):
             for ws in self.current_program.except_word_size:
                 word_size_list = configs.word_size_list
@@ -109,6 +136,7 @@ class Demo(QWidget):
             combobox.currentIndexChanged.connect(self.on_combobox_change_type)
             combobox.addItems(configs.input_types)
             combobox.setCurrentIndex(parameter.type)
+            line_edit.textEdited.connect(self.on_line_edit_change_input)
 
     def compute_func(self):
         self.set_result_func('Computing...')
